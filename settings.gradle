@@ -1,0 +1,7 @@
+include ':app'
+
+include 'shared'
+include 'api'
+include 'services:webservice'
+
+rootProject.name = 'droidule'

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Droidule</string>
+    <string name="debug_tag">Droidule</string>
+
+    <string name="action_refresh">Refresh</string>
+
+    <string name="settings">Instellingen</string>
+    <string name="help_feedback">Help &amp; Feedback</string>
+
+    <string name="myschedule_label">Mijn rooster</string>
+    <string name="recent_schedules">Recente roosters</string>
+    <string name="pick_schedule">Kies ander rooster</string>
+
+    <string name="search_attendees">Zoeken</string>
+    <string name="attendee_type_class">Klas</string>
+    <string name="attendee_type_staff">Medewerker</string>
+    <string name="attendee_type_facility">Faciliteit</string>
+
+    <string name="myweekschedule_home">Mijn rooster</string>
+    <string name="weekschedule_weekselect">Selecteer week</string>
+
+    <string name="drawer_open">Open navigatie</string>
+    <string name="drawer_close">Sluit navigatie</string>
+
+    <!-- Preferences -->
+
+    <string name="pref_schedule_color_key_title">Rooster kleuren</string>
+    <string name="pref_schedule_color_key_summary">Kies hoe de kleuren op het rooster worden bepaald</string>
+    <string name="pref_schedule_color_key_default">facility</string>
+
+    <string-array name="pref_schedule_color_key_values">
+        <item>class</item>
+        <item>staff</item>
+        <item>facility</item>
+    </string-array>
+
+    <string-array name="pref_schedule_color_key_entries">
+        <item>Klas</item>
+        <item>Docent</item>
+        <item>Locatie</item>
+    </string-array>
+
+    <string name="pref_api_endpoint_title">API eindpunt</string>
+    <string name="pref_api_endpoint_summary">Adres van de API om te gebruiken</string>
+    <string name="pref_api_endpoint_default">http://xedule.novaember.com/</string>
+
+    <string name="pref_version_title">Versie</string>
+    <string name="pref_version_summary">@string/version</string>
+
+    <!-- Theme preferences -->
+
+    <string name="pref_applied_theme_title">Thema</string>
+    <string name="pref_applied_theme_summary">Kies het kleuren thema van de app (herstart nodig)</string>
+    <string name="pref_applied_theme_default">XEDROID</string>
+
+    <string-array name="pref_applied_theme_values">
+        <item>XEDROID</item>
+        <item>BLUE</item>
+        <item>PASTEL</item>
+    </string-array>
+
+    <string-array name="pref_applied_theme_entries">
+        <item>Xedroid Klassiek</item>
+        <item>Blauw</item>
+        <item>Pastel</item>
+    </string-array>
+
+</resources>
