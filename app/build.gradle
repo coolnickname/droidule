@@ -7,8 +7,8 @@ android {
         applicationId "nl.yildri.droidule"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 0
-        versionName "0.1"
+        versionCode "git rev-list --count HEAD".execute().text as int
+        versionName "git describe --tags".execute().text[1..-2] // strip v and newline
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
