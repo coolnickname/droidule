@@ -16,11 +16,6 @@
             android:entryValues="@array/pref_schedule_color_key_values"
             android:defaultValue="@string/pref_schedule_color_key_default" />
 
-    <Preference
-            android:title="@string/pref_version_title"
-            android:summary="@string/pref_version_summary"
-            android:selectable="false" />
-
     <ListPreference
         android:key="pref_applied_theme"
         android:title="@string/pref_applied_theme_title"
@@ -29,5 +24,10 @@
         android:entries="@array/pref_applied_theme_entries"
         android:entryValues="@array/pref_applied_theme_values"
         android:defaultValue="@string/pref_applied_theme_default" />
+
+    <Preference
+        android:title="@string/pref_version_title"
+        android:summary="@string/pref_version_summary"
+        android:selectable="false" />
 
 </PreferenceScreen>
