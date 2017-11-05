@@ -21,7 +21,7 @@ The Difference™
 - Fixed a bug where it's impossible to scroll up on the attendee selection screen.
 
 ### New messes I've made
-- When selecting a weekend date, the date will change to next week monday. I'd rather still have the weekend selected, but just showing next week.
+~~- When selecting a weekend date, the date will change to next week monday. I'd rather still have the weekend selected, but just showing next week.~~ :)
 - Probably a ton more but I just haven't found it yet.
 
 Building

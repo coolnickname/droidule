@@ -66,6 +66,10 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
     private int week;
     private int weekday;
 
+    //This is so we can show next week's schedule during the weekend without changing the date in the date picker.
+    private int shownYear;
+    private int shownWeek;
+
     private boolean refreshing;
 
     @Override
@@ -258,18 +262,25 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
         if (refreshing) return;
         refreshing = true;
 
-        //TODO: Fimd a way to show the schedule of next week during the weekend, without changing
-        // the dat picker position.
+        //TODO: Find a better way to show the schedule of next week during the weekend, without changing
+        // the date picker position.
+
+        this.shownWeek = week;
+        this.shownYear = year;
 
         //Weeks start at sunday. 7 = saturday and 1 = sunday.
         if(weekday == 7 || weekday == 1){
             //Set the schedule to a week later
-            this.week = week + 1;
-            //Set the day to monday
-            this.weekday = 2;
+            shownWeek++;
+
+            //If next week is in the next year, let it be in the next year
+            if(shownWeek >= 52){
+                shownYear++;
+                shownWeek = 1;
+            }
         }
 
-        weekScheduleFragment.setWeek(year, week);
+        weekScheduleFragment.setWeek(shownYear, shownWeek);
 
         new AsyncTask<Void, Void, Void>()
         {
@@ -285,9 +296,9 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
                     // TODO: Investigate (Lollipop needs a looper for whatever reason)
                 }
 
-                if (force || attendee.getWeekScheduleAge(year, week) == 0)
+                if (force || attendee.getWeekScheduleAge(shownYear, shownWeek) == 0)
                 {
-                    Xedule.updateEvents(attendee, year, week);
+                    Xedule.updateEvents(attendee, shownYear, shownWeek);
                     Xedule.updateLocations(attendee.getLocation().getOrganisation());
                 }
 
@@ -295,7 +306,7 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
                 {
                     public void run()
                     {
-                        weekScheduleFragment.setEvents(attendee.getEvents(year, week));
+                        weekScheduleFragment.setEvents(attendee.getEvents(shownYear, shownWeek));
                     }
                 });
 
