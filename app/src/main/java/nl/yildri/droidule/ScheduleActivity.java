@@ -185,8 +185,8 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
 
         Bundle args = new Bundle();
         args.putInt("attendeeId", attendee.getId());
-        args.putInt("year", year);
-        args.putInt("week", week);
+        args.putInt("year", shownYear);
+        args.putInt("week", shownWeek);
         args.putInt("day", event.getDay());
         args.putInt("eventId", event.getId());
         dayScheduleFragment.setArguments(args);
