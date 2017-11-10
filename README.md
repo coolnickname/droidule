@@ -14,15 +14,14 @@ The Difference™
 ### New Features 🎉
 - A fancy theming engine with currently 3 themes. Screenshots coming soon ;)
 - Opening a schedule during the weekend will now show next week's schedule (Like Xedule does).
-- The first opened schedule will now be marked as the default (starred) until changed.
+- The first opened schedule will now be marked as the default (starred) until changed
 
 
-### Sam's mess I had to clean up 😛
-- Fixed a bug where it's impossible to scroll up on the attendee selection screen.
+Feedback
+-------
+If you have found a bug, please make sure it's not already filed under [issues](https://git.yildri.nl/Baconator/droidule/issues?scope=al&state=opened&search=%5BBug%5D). If it's a new one, first of all I'm sorry to have let your down. Second I'd like you to [mail me](mailto:yildri@yildri.nl) about it.
 
-### New messes I've made
-~~- When selecting a weekend date, the date will change to next week monday. I'd rather still have the weekend selected, but just showing next week.~~ :)
-- Probably a ton more but I just haven't found it yet.
+For any other feedback or if you want to help me with this project, feel free to mail me at [yildri@yildri.nl](mailto:yildri@yildri.nl).
 
 Building
 --------
