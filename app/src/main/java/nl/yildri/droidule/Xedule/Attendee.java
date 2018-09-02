@@ -92,14 +92,6 @@ public class Attendee implements Comparable<Attendee>
         }
     }
 
-    public Attendee(int id, String name, Location location, Type type)
-    {
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.type = type;
-    }
-
     public Attendee(Cursor cursor)
     {
         this.id = cursor.getInt(0);

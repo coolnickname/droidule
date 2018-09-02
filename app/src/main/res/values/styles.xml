@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="RedTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="XedroidTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
 
         <item name="colorPrimary">#e82802</item>
         <item name="colorPrimaryDark">#b01e02</item>
@@ -16,31 +16,7 @@
 
     </style>
 
-    <style name="PastelBlueTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        <item name="colorPrimary">#00afff</item>
-        <item name="colorPrimaryDark">@android:color/holo_blue_dark</item>
-        <item name="colorAccent">@android:color/holo_purple</item>d
-
-    </style>
-
-    <style name="PurpleTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        <item name="colorPrimary">#e6add8</item>
-        <item name="colorPrimaryDark">#db8ac7</item>
-        <item name="colorAccent">#88c3f6</item>
-
-    </style>
-
-    <style name="PastelPurpleTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        <item name="colorPrimary">#e6add8</item>
-        <item name="colorPrimaryDark">#db8ac7</item>
-        <item name="colorAccent">#88c3f6</item>
-
-    </style>
-
-    <style name="GreenTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="PastelTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
 
         <item name="colorPrimary">#e6add8</item>
         <item name="colorPrimaryDark">#db8ac7</item>

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "nl.yildri.droidule"
         minSdkVersion 19
@@ -35,5 +35,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     testCompile 'junit:junit:4.12'
     compile 'com.jpardogo.materialtabstrip:library:1.0.9'
-    compile 'org.jsoup:jsoup:1.11.2'
 }

@@ -10,7 +10,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import nl.yildri.droidule.Util.DatabaseOpenHelper;
 import nl.yildri.droidule.Droidule;
@@ -53,18 +52,6 @@ public class Event implements Comparable<Event>
         this.start = start;
         this.end = end;
         this.description = description;
-        this.attendees = new ArrayList<Attendee>();
-    }
-
-    public Event(int year, int week, int day, Time start, Time end, String description, int id)
-    {
-        this.year = year;
-        this.week = week;
-        this.day = day;
-        this.start = start;
-        this.end = end;
-        this.description = description;
-        this.id = id;
         this.attendees = new ArrayList<Attendee>();
     }
 
@@ -248,16 +235,6 @@ public class Event implements Comparable<Event>
         values.put("event", this.id);
         for (Attendee attendee : attendees)
         {
-
-            //TODO: Make the SQL query replace old entries instead of deleting all the old ones before adding a new one.
-            db.execSQL("DELETE FROM attendee_events\n" +
-                    "WHERE EXISTS (\n" +
-                    "  SELECT *\n" +
-                    "  FROM attendee_events\n" +
-                    "  WHERE attendee_events.attendee = " + attendee.getId() + "\n" +
-                    "  AND attendee_events.event = " + id + "\n" +
-                    ")");
-
             values.put("attendee", attendee.getId());
             db.insertWithOnConflict("attendee_events", null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
@@ -277,16 +254,10 @@ public class Event implements Comparable<Event>
 
         public Time(String str)
         {
-            String[] split;
-
-            if(str.contains("T")) {
-                split = str.split("T")[1].split(":");
-            }else{
-                split = str.split(":");
-            }
+            String[] split = str.split(":");
 
             this.hour = Integer.parseInt(split[0]);
-            this.minute = Integer.parseInt(split[1]);
+            this.minute = split.length > 1 ? Integer.parseInt(split[1]) : 0;
         }
 
         public int getHour()

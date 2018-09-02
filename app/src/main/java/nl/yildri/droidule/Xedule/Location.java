@@ -1,7 +1,6 @@
 package nl.yildri.droidule.Xedule;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -17,7 +16,6 @@ public class Location implements Comparable<Location>
     private int id;
     private String name;
     private Organisation organisation;
-    private String yearId = null;
 
     public Location(int id)
     {
@@ -36,14 +34,6 @@ public class Location implements Comparable<Location>
         this.id = cursor.getInt(0);
         this.name = cursor.getString(1);
         this.organisation = new Organisation(cursor.getInt(2));
-    }
-
-    public String getYearId(){
-        if(yearId == null){
-            yearId = id + "_" + Calendar.getInstance().get(Calendar.YEAR);
-        }
-
-        return yearId;
     }
 
     public boolean populate()

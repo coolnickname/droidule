@@ -3,7 +3,6 @@ package nl.yildri.droidule;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.StrictMode;
 import android.util.Log;
 
 import java.util.Calendar;

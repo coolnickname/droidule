@@ -2,8 +2,7 @@ CREATE TABLE IF NOT EXISTS organisations (
     id             INT,
     name           TEXT,
 
-    PRIMARY KEY (id),
-    UNIQUE KEY (id)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS locations (
@@ -12,7 +11,6 @@ CREATE TABLE IF NOT EXISTS locations (
     organisation   INT,
 
     PRIMARY KEY (id),
-    UNIQUE KEY (id),
     FOREIGN KEY (organisation) REFERENCES organisations
 );
 
@@ -23,21 +21,17 @@ CREATE TABLE IF NOT EXISTS attendees (
     type           INT,
 
     PRIMARY KEY (id),
-    UNIQUE KEY (id),
     FOREIGN KEY (location) REFERENCES locations
 );
 
 CREATE TABLE IF NOT EXISTS events (
-    id             INT,
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
     year           INT,
     week           INT,
     day            INT,
     description    TEXT,
     start          TEXT,
-    end            TEXT,
-
-    PRIMARY KEY (id),
-    UNIQUE KEY (id)
+    end            TEXT
 );
 
 CREATE TABLE IF NOT EXISTS attendee_events (

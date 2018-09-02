@@ -1,29 +1,20 @@
 package nl.yildri.droidule.Xedule;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 import nl.yildri.droidule.Util.DatabaseOpenHelper;
 import nl.yildri.droidule.Droidule;
 import nl.yildri.droidule.Util.SQLCreatorUtil;
-import nl.yildri.droidule.Xedule.api.XeduleAPI;
 
 public class Organisation implements Comparable<Organisation>
 {
     private int id;
-    private String name = null;
-    private URL url;
-    private int compatible = -1; //-1=null, 0=incompatible, 1=droidule compatible, 2=xedroid compatible
-    private String userCookie = null;
+    private String name;
 
     public Organisation(int id)
     {
@@ -40,56 +31,6 @@ public class Organisation implements Comparable<Organisation>
     {
         id = cursor.getInt(0);
         name = cursor.getString(1);
-    }
-
-    public URL getURL(){
-        if(url == null) updateURL();
-
-        return url;
-    }
-
-    public int getCompatible(){
-        if(compatible == -1) updateURL();
-
-        return compatible;
-    }
-
-    private void updateURL(){ //Should be async but causes the URL to be null when we need it.
-        try {
-            URL queryURL = new URL("https://roosters.xedule.nl/Organisatie/OrganisatorischeEenheid/" + id);
-
-            HttpURLConnection urlConnection = (HttpURLConnection) queryURL.openConnection();
-
-            urlConnection.getResponseCode(); //Dont remove this or de redirect doesnt work (?)
-            url = urlConnection.getURL();
-
-
-            if(url.toString().contains("https://roosters.xedule.nl/")){
-                compatible = 2; //xedroid compatible
-
-            }else if(url.toString().contains("https://sa") && url.toString().contains(".xedule.nl/")) {
-                compatible = 1; //droidule compatible
-
-                url = new URL(url.toString().split(Pattern.quote("/?"), 2)[0]);
-
-            }else{
-                compatible = 0; //incompatible (login required most likely)
-
-            }
-
-            urlConnection.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getUserCookie(){
-        if(userCookie == null){
-            userCookie = XeduleAPI.getUserCookie(getURL());
-        }
-
-        return userCookie;
     }
 
     public boolean populate()
