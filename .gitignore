@@ -44,3 +44,5 @@ captures/
 \.idea/runConfigurations\.xml
 
 desktop\.ini
+
+app/release/
