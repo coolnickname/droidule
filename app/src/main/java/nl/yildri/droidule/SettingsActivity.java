@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import nl.yildri.droidule.Theming.ThemeManager;
 
-public class SettingsActivity extends ActionBarActivity
+public class SettingsActivity extends AppCompatActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)

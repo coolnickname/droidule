@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -78,7 +78,7 @@ public class DayScheduleFragment extends Fragment
         super.onStart();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setElevation(0);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
     }
 
     public static class DaySchedulePagerAdapter extends FragmentPagerAdapter

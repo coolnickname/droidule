@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +48,7 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
         swipeLayout.setColorSchemeColors(Colours.primaryColor(this.getContext()));
         swipeLayout.setContainer(this);
 
-        weekScheduleView = (WeekScheduleView) swipeLayout.findViewById(R.id.weekschedule);
+        weekScheduleView = swipeLayout.findViewById(R.id.weekschedule);
         weekScheduleView.setWeek(year, week);
 
         weekScheduleView.setOnClickListener(new View.OnClickListener()
@@ -96,7 +96,7 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
         super.onResume();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setElevation(MiscUtil.getPx(8, getActivity().getResources()));
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(MiscUtil.getPx(8, getActivity().getResources()));
     }
 
     public void setEvents(final ArrayList<Event> events)
@@ -120,6 +120,7 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
 
     public void setRefreshing(boolean refreshing)
     {
+        this.refreshing = refreshing;
         swipeLayout.setRefreshing(refreshing);
     }
 

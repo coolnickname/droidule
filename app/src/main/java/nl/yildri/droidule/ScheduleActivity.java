@@ -22,8 +22,9 @@ import android.os.Looper;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ import nl.yildri.droidule.Schedule.WeekScheduleFragment;
 import nl.yildri.droidule.Xedule.Attendee;
 import nl.yildri.droidule.Xedule.Xedule;
 
-public class ScheduleActivity extends ActionBarActivity implements WeekScheduleFragment.OnEventSelectedListener,
+public class ScheduleActivity extends AppCompatActivity implements WeekScheduleFragment.OnEventSelectedListener,
                                                                    ListView.OnItemClickListener,
                                                                    ListView.OnScrollListener
 {
@@ -131,6 +132,9 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
             week = calendar.get(Calendar.WEEK_OF_YEAR);
             weekday = calendar.get(Calendar.DAY_OF_WEEK);
         }
+
+        shownYear = year;
+        shownWeek = week;
 
         weekScheduleFragment = new WeekScheduleFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.schedule_fragment, weekScheduleFragment).commit();
@@ -254,7 +258,7 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
     {
         ActionBar bar = getSupportActionBar();
         bar.setTitle(attendee.getName());
-        bar.setSubtitle("Week " + week);
+        bar.setSubtitle("Week " + shownWeek);
     }
 
     public void refresh(final boolean force)
@@ -262,19 +266,16 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
         if (refreshing) return;
         refreshing = true;
 
-        //TODO: Find a better way to show the schedule of next week during the weekend, without changing
-        // the date picker position.
-
         this.shownWeek = week;
         this.shownYear = year;
 
         //Weeks start at sunday. 7 = saturday and 1 = sunday.
         if(weekday == 7 || weekday == 1){
-            //Set the schedule to a week later
+            //Set the schedule to a week later in the weekends
             shownWeek++;
 
             //If next week is in the next year, let it be in the next year
-            if(shownWeek >= 52){
+            if(shownWeek > 52){
                 shownYear++;
                 shownWeek = 1;
             }
@@ -284,6 +285,16 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
 
         new AsyncTask<Void, Void, Void>()
         {
+
+            @Override
+            protected void onPreExecute()
+            {
+                //TODO: Find a way to have the refreshing spinner in the schedule activity.
+                //This causes NPE on swipeLayout in weekScheduleFragment
+                //weekScheduleFragment.setRefreshing(true);
+            }
+
+            @Override
             protected Void doInBackground(Void... _)
             {
                 try
@@ -313,12 +324,15 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
                 return null;
             }
 
+            @Override
             protected void onPostExecute(Void _)
             {
                 refreshing = false;
                 weekScheduleFragment.setRefreshing(false);
             }
         }.execute();
+
+        updateActionBarTitle();
     }
 
     @Override
@@ -482,6 +496,7 @@ public class ScheduleActivity extends ActionBarActivity implements WeekScheduleF
         public void refresh()
         {
             items = new ArrayList<Item>();
+
 
             // Class selection
             items.add(new IntentItem(R.drawable.ic_list_black_24dp, activity.getString(R.string.pick_schedule), ClassSelectionActivity.class));
