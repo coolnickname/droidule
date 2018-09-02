@@ -47,7 +47,7 @@
     <!-- Theme preferences -->
 
     <string name="pref_applied_theme_title">Thema</string>
-    <string name="pref_applied_theme_summary">Kies het kleuren thema van de app (herstart nodig)</string>
+    <string name="pref_applied_theme_summary">Kies het kleuren schema van de app (herstart nodig)</string>
     <string name="pref_applied_theme_default">BLUE</string>
 
     <string-array name="pref_applied_theme_values">
