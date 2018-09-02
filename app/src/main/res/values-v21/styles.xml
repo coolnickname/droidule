@@ -2,6 +2,4 @@
 
     <style name="LoadingSpinner" parent="@android:style/Widget.Material.Light.ProgressBar.Large"></style>
 
-    <style name="MaterialLightTheme" parent="android:Theme.Material.Light" />
-
 </resources>

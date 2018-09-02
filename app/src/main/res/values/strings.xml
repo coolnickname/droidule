@@ -2,12 +2,8 @@
 <resources>
 
     <string name="app_name">Droidule</string>
-    <string name="debug_tag">Droidule</string>
-
-    <string name="action_refresh">Refresh</string>
 
     <string name="settings">Instellingen</string>
-    <string name="help_feedback">Help &amp; Feedback</string>
 
     <string name="myschedule_label">Mijn rooster</string>
     <string name="recent_schedules">Recente roosters</string>

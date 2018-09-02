@@ -1,5 +1,7 @@
 package nl.yildri.droidule.Xedule;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,12 +9,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import android.util.Log;
-
-public class Fetcher
-{
-    public static String downloadUrl(String urlstr)
-    {
+public class Fetcher {
+    public static String downloadUrl(String urlstr) {
         Log.d("Xedule", "Downloading " + urlstr);
 
         InputStream is = null;
@@ -31,54 +29,38 @@ public class Fetcher
             // Convert the InputStream into a string
             String contentAsString = readStream(is);
             return contentAsString;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("Xedule", "Error downloading " + urlstr, e);
             return "";
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 if (is != null)
                     is.close();
+            } catch (Exception e) {
             }
-            catch (Exception e) {}
         }
     }
 
-    private static String readStream(InputStream in)
-    {
+    private static String readStream(InputStream in) {
         BufferedReader reader = null;
 
-        try
-        {
+        try {
             reader = new BufferedReader(new InputStreamReader(in));
 
             String line;
             String out = "";
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 out += line;
             }
 
             return out;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            if (reader != null)
-            {
-                try
-                {
+        } finally {
+            if (reader != null) {
+                try {
                     reader.close();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

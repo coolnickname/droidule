@@ -29,12 +29,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import nl.yildri.droidule.R;
-import nl.yildri.droidule.Schedule.Event;
 import nl.yildri.droidule.ScheduleActivity;
 import nl.yildri.droidule.Xedule.Attendee;
 
-public class DayScheduleFragment extends Fragment
-{
+public class DayScheduleFragment extends Fragment {
     private PagerSlidingTabStrip tabStrip;
     private ViewPager pager;
     private DaySchedulePagerAdapter pagerAdapter;
@@ -43,8 +41,7 @@ public class DayScheduleFragment extends Fragment
     private int year;
     private int week;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dayschedule_fragment, container, false);
 
         tabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.dayschedule_tabstrip);
@@ -67,28 +64,24 @@ public class DayScheduleFragment extends Fragment
     }
 
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(0);
     }
 
-    public static class DaySchedulePagerAdapter extends FragmentPagerAdapter
-    {
+    public static class DaySchedulePagerAdapter extends FragmentPagerAdapter {
         private int attendeeId;
         private int year;
         private int week;
 
-        public DaySchedulePagerAdapter(int attendeeId, int year, int week, FragmentManager fm)
-        {
+        public DaySchedulePagerAdapter(int attendeeId, int year, int week, FragmentManager fm) {
             super(fm);
 
             this.attendeeId = attendeeId;
@@ -97,25 +90,21 @@ public class DayScheduleFragment extends Fragment
         }
 
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return 5;
         }
 
-        public String getPageTitle(int position)
-        {
+        public String getPageTitle(int position) {
             return (new String[]{"MA", "DI", "WO", "DO", "VR"})[position];
         }
 
         @Override
-        public Fragment getItem(int position)
-        {
+        public Fragment getItem(int position) {
             return (Fragment) DaySchedulePageFragment.newInstance(attendeeId, year, week, position + 1);
         }
     }
 
-    public static class DaySchedulePageFragment extends ListFragment
-    {
+    public static class DaySchedulePageFragment extends ListFragment {
         private Attendee attendee;
         private int year;
         private int week;
@@ -123,8 +112,7 @@ public class DayScheduleFragment extends Fragment
 
         private DayScheduleAdapter dayScheduleAdapter;
 
-        static DaySchedulePageFragment newInstance(int attendeeId, int year, int week, int day)
-        {
+        static DaySchedulePageFragment newInstance(int attendeeId, int year, int week, int day) {
             DaySchedulePageFragment f = new DaySchedulePageFragment();
 
             Bundle args = new Bundle();
@@ -138,8 +126,7 @@ public class DayScheduleFragment extends Fragment
         }
 
         @Override
-        public void onCreate(Bundle savedInstanceState)
-        {
+        public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             attendee = new Attendee(getArguments() != null ? getArguments().getInt("attendeeId") : 0);
@@ -151,31 +138,28 @@ public class DayScheduleFragment extends Fragment
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.dayschedulepage_fragment, container, false);
             registerForContextMenu(view.findViewById(android.R.id.list));
             return view;
         }
 
         @Override
-        public void onActivityCreated(Bundle savedInstanceState)
-        {
+        public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             setListAdapter(dayScheduleAdapter);
         }
 
         @Override
-        public void onListItemClick(ListView listView, View view, int position, long id)
-        {
-            if (dayScheduleAdapter.getItemViewType(position) != DayScheduleAdapter.TYPE_EVENT) return;
+        public void onListItemClick(ListView listView, View view, int position, long id) {
+            if (dayScheduleAdapter.getItemViewType(position) != DayScheduleAdapter.TYPE_EVENT)
+                return;
 
             listView.showContextMenuForChild(view);
         }
 
         @Override
-        public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo)
-        {
+        public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
             super.onCreateContextMenu(menu, view, menuInfo);
 
             menu.setHeaderTitle("Ga naar rooster van...");
@@ -184,15 +168,13 @@ public class DayScheduleFragment extends Fragment
             Event event = dayScheduleAdapter.getItem(info.position);
 
             int i = 0;
-            for (Attendee attendee : event.getAttendees())
-            {
+            for (Attendee attendee : event.getAttendees()) {
                 menu.add(0, i++, 0, attendee.getType().getName() + ": " + attendee.getName());
             }
         }
 
         @Override
-        public boolean onContextItemSelected(MenuItem item)
-        {
+        public boolean onContextItemSelected(MenuItem item) {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
             Event event = dayScheduleAdapter.getItem(info.position);
@@ -211,29 +193,24 @@ public class DayScheduleFragment extends Fragment
         }
     }
 
-    public static class DayScheduleAdapter extends BaseAdapter
-    {
-        private Activity activity;
-        private ArrayList<Event> data;
-        private static LayoutInflater inflater = null;
-        private Attendee attendee = null;
-
+    public static class DayScheduleAdapter extends BaseAdapter {
         public static final int TYPE_EVENT = 0;
         public static final int TYPE_BREAK = 1;
         public static final int TYPE_MAX_COUNT = 2;
+        private static LayoutInflater inflater = null;
+        private Activity activity;
+        private ArrayList<Event> data;
+        private Attendee attendee = null;
 
-        public DayScheduleAdapter(Attendee attendee, int year, int week, int day, Activity activity)
-        {
+        public DayScheduleAdapter(Attendee attendee, int year, int week, int day, Activity activity) {
             this.attendee = attendee;
             this.activity = activity;
 
             data = attendee.getEvents(year, week, day);
             Collections.sort(data);
 
-            for (int i = 1; i < data.size(); i++)
-            {
-                if (data.get(i).getStart().compareTo(data.get(i - 1).getEnd()) != 0)
-                {
+            for (int i = 1; i < data.size(); i++) {
+                if (data.get(i).getStart().compareTo(data.get(i - 1).getEnd()) != 0) {
                     data.add(i, null);
                     i++;
                 }
@@ -242,37 +219,30 @@ public class DayScheduleFragment extends Fragment
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public Event getItem(int position)
-        {
+        public Event getItem(int position) {
             return data.get(position);
         }
 
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return (long) position;
         }
 
-        public int getCount()
-        {
+        public int getCount() {
             return data.size();
         }
 
-        public int getViewTypeCount()
-        {
+        public int getViewTypeCount() {
             return TYPE_MAX_COUNT;
         }
 
-        public int getItemViewType(int position)
-        {
+        public int getItemViewType(int position) {
             return data.get(position) == null ? TYPE_BREAK : TYPE_EVENT;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
+        public View getView(int position, View convertView, ViewGroup parent) {
             Event event = data.get(position);
 
-            if (event == null)
-            {
+            if (event == null) {
                 if (convertView == null)
                     convertView = (View) inflater.inflate(R.layout.dayschedule_break_item, null);
 

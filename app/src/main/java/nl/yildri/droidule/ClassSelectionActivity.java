@@ -19,14 +19,12 @@ import nl.yildri.droidule.Xedule.Location;
 import nl.yildri.droidule.Xedule.Organisation;
 
 public class ClassSelectionActivity extends AppCompatActivity implements OrganisationsFragment.OnOrganisationSelectedListener,
-                                                                         LocationsFragment.OnLocationSelectedListener,
-                                                                         AttendeesFragment.OnAttendeeSelectedListener
-{
+        LocationsFragment.OnLocationSelectedListener,
+        AttendeesFragment.OnAttendeeSelectedListener {
     private boolean myAttendeeDefined;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         //TODO: Don't do networking on the main thread. Currently only updating the orginisations is done this way.
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -42,8 +40,7 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
         myAttendeeDefined = sharedPref.getInt("myschedule", 0) != 0;
         getSupportActionBar().setDisplayHomeAsUpEnabled(myAttendeeDefined);
 
-        if (savedInstanceState == null)
-        {
+        if (savedInstanceState == null) {
             if (findViewById(R.id.classselection_fragment) != null) // Single-pane view
             {
                 OrganisationsFragment organisationsFragment = new OrganisationsFragment();
@@ -65,13 +62,12 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
         }
     }
 
-    public void onOrganisationSelected(Organisation organisation)
-    {
+    public void onOrganisationSelected(Organisation organisation) {
 
-        if(organisation.getCompatible() == 2){ //Organisation only compatible with xedroid
+        if (organisation.getCompatible() == 2) { //Organisation only compatible with xedroid
             MessageUtil.showToast(getString(R.string.organisation_incompatible_xedroid), this);
             return;
-        }else if(organisation.getCompatible() == 0){ //Organisation incompatible
+        } else if (organisation.getCompatible() == 0) { //Organisation incompatible
             MessageUtil.showToast(getString(R.string.organisation_incompatible), this);
             return;
         }
@@ -85,8 +81,7 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
         if (locationsFragment != null) // Multi-pane view
         {
             locationsFragment.setOrganisation(organisation);
-        }
-        else // Single-pane view
+        } else // Single-pane view
         {
             locationsFragment = new LocationsFragment();
 
@@ -95,14 +90,13 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
             locationsFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                .replace(R.id.classselection_fragment, locationsFragment)
-                .addToBackStack(null)
-                .commit();
+                    .replace(R.id.classselection_fragment, locationsFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
-    public void onLocationSelected(Location location)
-    {
+    public void onLocationSelected(Location location) {
         ActionBar bar = getSupportActionBar();
         bar.setTitle(location.getName());
         bar.setDisplayHomeAsUpEnabled(true);
@@ -112,8 +106,7 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
         if (attendeesFragment != null) // Multi-pane view
         {
             attendeesFragment.updateLocation(location);
-        }
-        else // Single-pane view
+        } else // Single-pane view
         {
             attendeesFragment = new AttendeesFragment();
 
@@ -122,19 +115,17 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
             attendeesFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                .replace(R.id.classselection_fragment, attendeesFragment)
-                .addToBackStack(null)
-                .commit();
+                    .replace(R.id.classselection_fragment, attendeesFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
-    public void onAttendeeSelected(Attendee attendee)
-    {
-        try
-        {
+    public void onAttendeeSelected(Attendee attendee) {
+        try {
             //If the current main schedule is not set yet, set it to first searched schedule by def.
             SharedPreferences sharedPref = getSharedPreferences("global", Context.MODE_PRIVATE);
-            if(sharedPref.getInt("myschedule", 0) == 0){
+            if (sharedPref.getInt("myschedule", 0) == 0) {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putInt("myschedule", attendee.getId());
                 editor.apply();
@@ -145,30 +136,24 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
             intent.putExtra("attendeeId", attendee.getId());
             startActivity(intent);
             finish();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             Log.e("Droidule", "Error: " + e.getMessage());
         }
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
 
         // Stop if we're in a multi-pane layout
         // if (getSupportFragmentManager().findFragmentById(R.id.organisations_fragment) != null) return;
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.classselection_fragment);
-        if (fragment instanceof LocationsFragment)
-        {
+        if (fragment instanceof LocationsFragment) {
             ActionBar bar = getSupportActionBar();
             bar.setTitle(((LocationsFragment) fragment).getOrganisation().getName());
             bar.setDisplayHomeAsUpEnabled(true);
-        }
-        else if (fragment instanceof OrganisationsFragment)
-        {
+        } else if (fragment instanceof OrganisationsFragment) {
             ActionBar bar = getSupportActionBar();
             bar.setTitle(R.string.app_name);
             bar.setDisplayHomeAsUpEnabled(myAttendeeDefined);
@@ -176,30 +161,25 @@ public class ClassSelectionActivity extends AppCompatActivity implements Organis
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will automatically
         // handle clicks on the Home/Up button, so long as you specify a parent
         // activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.classselection_fragment);
-            if (fragment instanceof OrganisationsFragment)
-            {
+            if (fragment instanceof OrganisationsFragment) {
                 Intent intent = new Intent(this, ScheduleActivity.class);
                 startActivity(intent);
-            }
-            else onBackPressed();
+            } else onBackPressed();
 
             return true;
         }

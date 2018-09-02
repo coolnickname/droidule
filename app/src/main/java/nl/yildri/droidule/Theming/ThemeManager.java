@@ -1,8 +1,6 @@
 package nl.yildri.droidule.Theming;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import nl.yildri.droidule.Droidule;
@@ -15,7 +13,7 @@ import nl.yildri.droidule.R;
 
 public class ThemeManager {
 
-    public static int getTheme(){
+    public static int getTheme() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Droidule.getContext());
 
         switch (sharedPref.getString("pref_applied_theme", "BLUE")) {

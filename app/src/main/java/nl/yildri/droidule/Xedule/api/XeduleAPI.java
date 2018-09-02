@@ -10,26 +10,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
-import nl.yildri.droidule.Droidule;
 import nl.yildri.droidule.Schedule.Event;
 import nl.yildri.droidule.Util.Constants;
 import nl.yildri.droidule.Util.DebugData;
@@ -42,13 +33,13 @@ import nl.yildri.droidule.Xedule.Organisation;
  */
 
 public class XeduleAPI {
-    public static ArrayList<Organisation> getOrganisations(){
+    public static ArrayList<Organisation> getOrganisations() {
         Document page = null;
         ArrayList<Organisation> organisations = new ArrayList<>();
 
         try {
             page = Jsoup.parse(new URL("https://roosters.xedule.nl/"), 10000);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Log.w("XeduleAPI", "Data: " + "URL not working in XeduleAPI#getOrganisations");
             return null;
@@ -56,7 +47,7 @@ public class XeduleAPI {
 
         Elements rawOrganisations = page.body().getElementsByClass("organisatie");
 
-        for(Element element : rawOrganisations){
+        for (Element element : rawOrganisations) {
             String HTML = element.html();
 
             int id = Integer.parseInt(HTML.substring(
@@ -68,7 +59,7 @@ public class XeduleAPI {
                     HTML.indexOf("</a>"));
 
             //TODO: Allow for other schools once I fix fetching attendees.
-            if(id != 13) continue;
+            if (id != 13) continue;
 
             organisations.add(new Organisation(id, name));
         }
@@ -77,15 +68,15 @@ public class XeduleAPI {
         return organisations;
     }
 
-    public static ArrayList<Location> getLocations(Organisation organisation){
+    public static ArrayList<Location> getLocations(Organisation organisation) {
         ArrayList<Location> locations = new ArrayList<>();
 
         try {
-            URL url =  new URL(organisation.getURL() + Constants.LOCATIONS_ENDPOINT);
+            URL url = new URL(organisation.getURL() + Constants.LOCATIONS_ENDPOINT);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            if(connection.getResponseCode() != 200){
+            if (connection.getResponseCode() != 200) {
                 Log.w("XeduleAPI", "Error while getting locations: " + connection.getResponseCode());
                 return locations;
             }
@@ -93,7 +84,8 @@ public class XeduleAPI {
             //Read the response
             ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
 
-            for(byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b));
+            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b))
+                ;
             JSONArray locationArray = new JSONArray(new String(outputBytes.toByteArray(), StandardCharsets.UTF_8));
 
             for (int i = 0; i < locationArray.length(); i++) {
@@ -139,7 +131,8 @@ public class XeduleAPI {
 
             outputBytes = new ByteArrayOutputStream();
 
-            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b)) ;
+            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b))
+                ;
 
             //locationArray = new JSONArray((new String(outputBytes.toByteArray(), StandardCharsets.UTF_8)).replaceAll("\"", "\\\""));
 
@@ -167,7 +160,8 @@ public class XeduleAPI {
 
             outputBytes = new ByteArrayOutputStream();
 
-            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b)) ;
+            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b))
+                ;
 
             //locationArray = new JSONArray(new String(outputBytes.toByteArray(), StandardCharsets.UTF_8));
 
@@ -195,7 +189,8 @@ public class XeduleAPI {
 
             outputBytes = new ByteArrayOutputStream();
 
-            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b)) ;
+            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b))
+                ;
 
             //locationArray = new JSONArray(new String(outputBytes.toByteArray(), StandardCharsets.UTF_8));
 
@@ -213,10 +208,10 @@ public class XeduleAPI {
             outputBytes.close();
             connection.disconnect();
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e("XeduleAPI", "Error while updating staff, facilities and classes.");
             e.printStackTrace();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("XeduleAPI", "Error while updating staff, facilities and classes.");
             e.printStackTrace();
         }
@@ -224,18 +219,18 @@ public class XeduleAPI {
         return attendees;
     }
 
-    public static ArrayList<Event> getEvents(Attendee attendee, int year, int week){
+    public static ArrayList<Event> getEvents(Attendee attendee, int year, int week) {
         ArrayList<Event> events = new ArrayList<>();
-        String query = attendee.getLocation().getId() + "_" + year + "_" + week +"_" + attendee.getId();
+        String query = attendee.getLocation().getId() + "_" + year + "_" + week + "_" + attendee.getId();
 
         try {
-            URL url =  new URL(attendee.getLocation().getOrganisation().getURL() + Constants.SCHEDULE_ENDPOINT + query);
+            URL url = new URL(attendee.getLocation().getOrganisation().getURL() + Constants.SCHEDULE_ENDPOINT + query);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.addRequestProperty("cookie", attendee.getLocation().getOrganisation().getUserCookie());
 
-            if(connection.getResponseCode() != 200){
+            if (connection.getResponseCode() != 200) {
                 Log.w("XeduleAPI", "Error while getting events: " + connection.getResponseCode());
                 return events;
             }
@@ -243,7 +238,8 @@ public class XeduleAPI {
             //Read the response
             ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
 
-            for(byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b));
+            for (byte[] b = new byte[512]; 0 < connection.getInputStream().read(b); outputBytes.write(b))
+                ;
             JSONArray rawEventArray = new JSONArray(new String(outputBytes.toByteArray(), StandardCharsets.UTF_8));
 
             //The output for this request is ridiculous. Literally what the fuck.
@@ -268,7 +264,7 @@ public class XeduleAPI {
 
                 JSONArray attendees = eventJSON.getJSONArray("atts");
 
-                for(int i2 = 0; i2 < attendees.length(); i2++){
+                for (int i2 = 0; i2 < attendees.length(); i2++) {
                     Attendee att = new Attendee(attendees.getInt(i2));
                     event.addAttendee(att);
                 }
@@ -286,11 +282,11 @@ public class XeduleAPI {
         return events;
     }
 
-    public static String getUserCookie(URL url){
+    public static String getUserCookie(URL url) {
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            if(connection.getResponseCode() != 200){
+            if (connection.getResponseCode() != 200) {
                 Log.w("XeduleAPI", "Error while getting locations: " + connection.getResponseCode());
                 return null;
             }

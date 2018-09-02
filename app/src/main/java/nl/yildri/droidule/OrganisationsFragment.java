@@ -1,40 +1,29 @@
 package nl.yildri.droidule;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
-import android.support.v4.app.ListFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.lang.ClassCastException;
+import java.util.ArrayList;
+import java.util.List;
 
-import nl.yildri.droidule.R;
 import nl.yildri.droidule.Theming.Colours;
 import nl.yildri.droidule.Xedule.Organisation;
 import nl.yildri.droidule.Xedule.Xedule;
 
-public class OrganisationsFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener
-{
+public class OrganisationsFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
     private OnOrganisationSelectedListener listener;
     private ArrayAdapter<Organisation> adapter;
     private SwipeRefreshLayout swipeLayout;
 
-    public interface OnOrganisationSelectedListener
-    {
-        public void onOrganisationSelected(Organisation organisation);
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.organisations_fragment, container, false);
 
         swipeLayout = (SwipeRefreshLayout) ((ViewGroup) v).findViewById(R.id.swipe_container);
@@ -46,91 +35,77 @@ public class OrganisationsFragment extends ListFragment implements SwipeRefreshL
     }
 
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        try
-        {
+        try {
             listener = (OnOrganisationSelectedListener) activity;
-        }
-        catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnOrganisationSelectedListener");
         }
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
 
         ArrayList<Organisation> organisations = Organisation.getAll();
-        if (organisations.isEmpty())
-        {
+        if (organisations.isEmpty()) {
             refresh();
-        }
-        else
-        {
+        } else {
             populateList(organisations);
         }
     }
 
     @Override
-    public void onRefresh()
-    {
+    public void onRefresh() {
         refresh();
     }
 
-    public void refresh()
-    {
-        new AsyncTask<Void, Void, ArrayList<Organisation>>()
-        {
+    public void refresh() {
+        new AsyncTask<Void, Void, ArrayList<Organisation>>() {
             @Override
-            protected void onPreExecute()
-            {
+            protected void onPreExecute() {
                 swipeLayout.setRefreshing(true);
             }
 
             @Override
-            protected ArrayList<Organisation> doInBackground(Void... _)
-            {
+            protected ArrayList<Organisation> doInBackground(Void... _) {
                 Xedule.updateOrganisations();
                 return Organisation.getAll();
             }
 
             @Override
-            protected void onPostExecute(ArrayList<Organisation> organisations)
-            {
+            protected void onPostExecute(ArrayList<Organisation> organisations) {
                 populateList(organisations);
                 swipeLayout.setRefreshing(false);
             }
         }.execute();
     }
 
-    public void populateList(List<Organisation> organisations)
-    {
+    public void populateList(List<Organisation> organisations) {
         super.onStart();
 
-        if (getActivity() == null) return; // The activity could have been destroyed since we're coming
-                                           //  from a background job
+        if (getActivity() == null)
+            return; // The activity could have been destroyed since we're coming
+        //  from a background job
 
         ((ViewGroup) getView()).findViewById(R.id.list_loading).setVisibility(View.GONE);
 
-        if (organisations.isEmpty())
-        {
+        if (organisations.isEmpty()) {
             ((ViewGroup) getView()).findViewById(R.id.list_empty).setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             adapter = new ArrayAdapter<Organisation>(getActivity(), R.layout.organisation_item, organisations);
             setListAdapter(adapter);
         }
     }
 
     @Override
-    public void onListItemClick(ListView list, View view, int position, long id)
-    {
+    public void onListItemClick(ListView list, View view, int position, long id) {
         listener.onOrganisationSelected(adapter.getItem(position));
+    }
+
+    public interface OnOrganisationSelectedListener {
+        public void onOrganisationSelected(Organisation organisation);
     }
 }

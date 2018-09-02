@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,8 +23,7 @@ import nl.yildri.droidule.Util.MiscUtil;
 import nl.yildri.droidule.Xedule.Attendee;
 
 public class WeekScheduleFragment extends Fragment implements EventReceiver,
-                                                              SwipeRefreshLayout.OnRefreshListener
-{
+        SwipeRefreshLayout.OnRefreshListener {
     private ScheduleActivity parent;
     private WeekScheduleView weekScheduleView;
     private Attendee attendee;
@@ -36,13 +34,7 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
 
     private boolean refreshing;
 
-    public interface OnEventSelectedListener
-    {
-        public void onEventSelected(Event event);
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         swipeLayout = (ScheduleSwipeRefreshLayout) inflater.inflate(R.layout.weekschedule_fragment, container, false);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeColors(Colours.primaryColor(this.getContext()));
@@ -51,11 +43,10 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
         weekScheduleView = swipeLayout.findViewById(R.id.weekschedule);
         weekScheduleView.setWeek(year, week);
 
-        weekScheduleView.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                if (parent != null) parent.onEventSelected(((WeekScheduleView.EventView) view).getEvent());
+        weekScheduleView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (parent != null)
+                    parent.onEventSelected(((WeekScheduleView.EventView) view).getEvent());
                 else Log.w("Droidule", "WeekScheduleFragment's parent is null!");
             }
         });
@@ -64,16 +55,12 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
     }
 
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        try
-        {
+        try {
             parent = (ScheduleActivity) activity;
-        }
-        catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " can only be used by ScheduleActivity");
         }
 
@@ -83,65 +70,59 @@ public class WeekScheduleFragment extends Fragment implements EventReceiver,
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
 
         ((ScheduleActivity) getActivity()).refresh(false);
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             ((AppCompatActivity) getActivity()).getSupportActionBar().setElevation(MiscUtil.getPx(8, getActivity().getResources()));
     }
 
-    public void setEvents(final ArrayList<Event> events)
-    {
+    public void setEvents(final ArrayList<Event> events) {
         weekScheduleView.clear();
         weekScheduleView.setEvents(events);
     }
 
-    public void setWeek(int year, int week)
-    {
+    public void setWeek(int year, int week) {
         this.year = year;
         this.week = week;
 
         if (weekScheduleView != null) weekScheduleView.setWeek(year, week);
     }
 
-    public boolean canScrollUp()
-    {
+    public boolean canScrollUp() {
         return weekScheduleView.canScrollUp();
     }
 
-    public void setRefreshing(boolean refreshing)
-    {
+    public void setRefreshing(boolean refreshing) {
         this.refreshing = refreshing;
         swipeLayout.setRefreshing(refreshing);
     }
 
     @Override
-    public void onRefresh()
-    {
+    public void onRefresh() {
         parent.refresh(true);
     }
 
-    private class InvalidateTimer extends TimerTask
-    {
+    public interface OnEventSelectedListener {
+        public void onEventSelected(Event event);
+    }
+
+    private class InvalidateTimer extends TimerTask {
         WeekScheduleFragment fragment;
 
-        public InvalidateTimer(WeekScheduleFragment fragment)
-        {
+        public InvalidateTimer(WeekScheduleFragment fragment) {
             this.fragment = fragment;
         }
 
         @Override
-        public void run()
-        {
+        public void run() {
         }
     }
 }

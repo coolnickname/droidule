@@ -1,19 +1,12 @@
 package nl.yildri.droidule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +15,6 @@ import android.os.Looper;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -42,18 +34,23 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import nl.yildri.droidule.Theming.ThemeManager;
-import nl.yildri.droidule.Util.MiscUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
 import nl.yildri.droidule.Schedule.DayScheduleFragment;
 import nl.yildri.droidule.Schedule.Event;
 import nl.yildri.droidule.Schedule.WeekScheduleFragment;
+import nl.yildri.droidule.Theming.ThemeManager;
+import nl.yildri.droidule.Util.MiscUtil;
 import nl.yildri.droidule.Xedule.Attendee;
 import nl.yildri.droidule.Xedule.Xedule;
 
 public class ScheduleActivity extends AppCompatActivity implements WeekScheduleFragment.OnEventSelectedListener,
-                                                                   ListView.OnItemClickListener,
-                                                                   ListView.OnScrollListener
-{
+        ListView.OnItemClickListener,
+        ListView.OnScrollListener {
     public final static int RECENTS_LIST_MAX_SIZE = 5;
 
     private DrawerLayout drawerLayout;
@@ -74,8 +71,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
     private boolean refreshing;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         //Update theme
@@ -90,23 +86,18 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         week = intent.getIntExtra("week", 1);
         weekday = intent.getIntExtra("weekday", 1);
 
-        if (attendee.getId() == 0)
-        {
+        if (attendee.getId() == 0) {
             SharedPreferences sharedPref = getSharedPreferences("global", Context.MODE_PRIVATE);
             attendee = new Attendee(sharedPref.getInt("myschedule", 0));
         }
 
-        if (attendee.getId() == 0)
-        {
-            try
-            {
+        if (attendee.getId() == 0) {
+            try {
                 Intent newIntent = new Intent(this, ClassSelectionActivity.class);
                 newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(newIntent);
                 finish();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 Log.e("Droidule", "Error: " + e.getMessage());
             }
 
@@ -125,8 +116,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         editor.putString("recents", TextUtils.join(",", recents.toArray()));
         editor.apply();
 
-        if (year == 1970 && week == 1)
-        {
+        if (year == 1970 && week == 1) {
             Calendar calendar = Calendar.getInstance(new Locale("nl", "NL"));
             year = calendar.get(Calendar.YEAR);
             week = calendar.get(Calendar.WEEK_OF_YEAR);
@@ -160,16 +150,16 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         bar.setHomeButtonEnabled(true);
     }
 
-    public void onItemClick(AdapterView parent, View view, int position, long id)
-    {
+    public void onItemClick(AdapterView parent, View view, int position, long id) {
         drawerAdapter.getItem(position).onClick(parent.getContext());
     }
 
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
-    {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return; // TODO: 'Fake' shadow if pre-lollipop?
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            return; // TODO: 'Fake' shadow if pre-lollipop?
 
-        if (firstVisibleItem + visibleItemCount != totalItemCount) return; // We're not anywhere near the bottom
+        if (firstVisibleItem + visibleItemCount != totalItemCount)
+            return; // We're not anywhere near the bottom
 
         View bottomView = view.getChildAt(view.getChildCount() - 1);
         if (bottomView == null) return; // Shouldn't happen, but still
@@ -178,13 +168,11 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         drawerFooter.setElevation(Math.min(offset, MiscUtil.getPx(16, getResources())));
     }
 
-    public void onScrollStateChanged(AbsListView view, int scrollState)
-    {
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
         // stub
     }
 
-    public void onEventSelected(Event event)
-    {
+    public void onEventSelected(Event event) {
         DayScheduleFragment dayScheduleFragment = new DayScheduleFragment();
 
         Bundle args = new Bundle();
@@ -196,23 +184,21 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         dayScheduleFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
-            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            .add(R.id.schedule_fragment, dayScheduleFragment)
-            .addToBackStack(null)
-            .commit();
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .add(R.id.schedule_fragment, dayScheduleFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
+    protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
         drawerToggle.syncState();
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         //This seems to not work. Sad.
         //Update theme
@@ -222,20 +208,17 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public Attendee getAttendee()
-    {
+    public Attendee getAttendee() {
         return attendee;
     }
 
-    public Calendar getDate()
-    {
+    public Calendar getDate() {
         Calendar c = Calendar.getInstance(new Locale("nl", "NL"));
         c.clear();
         c.set(Calendar.YEAR, year);
@@ -245,8 +228,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         return c;
     }
 
-    public void setDate(Calendar c)
-    {
+    public void setDate(Calendar c) {
         year = c.get(Calendar.YEAR);
         week = c.get(Calendar.WEEK_OF_YEAR);
         weekday = c.get(Calendar.DAY_OF_WEEK);
@@ -254,15 +236,13 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         updateActionBarTitle();
     }
 
-    private void updateActionBarTitle()
-    {
+    private void updateActionBarTitle() {
         ActionBar bar = getSupportActionBar();
         bar.setTitle(attendee.getName());
         bar.setSubtitle("Week " + shownWeek);
     }
 
-    public void refresh(final boolean force)
-    {
+    public void refresh(final boolean force) {
         if (refreshing) return;
         refreshing = true;
 
@@ -270,12 +250,12 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         this.shownYear = year;
 
         //Weeks start at sunday. 7 = saturday and 1 = sunday.
-        if(weekday == 7 || weekday == 1){
+        if (weekday == 7 || weekday == 1) {
             //Set the schedule to a week later in the weekends
             shownWeek++;
 
             //If next week is in the next year, let it be in the next year
-            if(shownWeek > 52){
+            if (shownWeek > 52) {
                 shownYear++;
                 shownWeek = 1;
             }
@@ -283,40 +263,31 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
 
         weekScheduleFragment.setWeek(shownYear, shownWeek);
 
-        new AsyncTask<Void, Void, Void>()
-        {
+        new AsyncTask<Void, Void, Void>() {
 
             @Override
-            protected void onPreExecute()
-            {
+            protected void onPreExecute() {
                 //TODO: Find a way to have the refreshing spinner in the schedule activity.
                 //This causes NPE on swipeLayout in weekScheduleFragment
                 //weekScheduleFragment.setRefreshing(true);
             }
 
             @Override
-            protected Void doInBackground(Void... _)
-            {
-                try
-                {
+            protected Void doInBackground(Void... _) {
+                try {
                     Looper.prepare();
                     new Handler();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     // TODO: Investigate (Lollipop needs a looper for whatever reason)
                 }
 
-                if (force || attendee.getWeekScheduleAge(shownYear, shownWeek) == 0)
-                {
+                if (force || attendee.getWeekScheduleAge(shownYear, shownWeek) == 0) {
                     Xedule.updateEvents(attendee, shownYear, shownWeek);
                     Xedule.updateLocations(attendee.getLocation().getOrganisation());
                 }
 
-                runOnUiThread(new Runnable()
-                {
-                    public void run()
-                    {
+                runOnUiThread(new Runnable() {
+                    public void run() {
                         weekScheduleFragment.setEvents(attendee.getEvents(shownYear, shownWeek));
                     }
                 });
@@ -325,8 +296,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
             }
 
             @Override
-            protected void onPostExecute(Void _)
-            {
+            protected void onPostExecute(Void _) {
                 refreshing = false;
                 weekScheduleFragment.setRefreshing(false);
             }
@@ -336,8 +306,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.weekschedule, menu);
 
@@ -351,36 +320,29 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (drawerToggle.onOptionsItemSelected(item))
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         int id = item.getItemId();
 
-        if (id == R.id.weekschedule_weekselect)
-        {
+        if (id == R.id.weekschedule_weekselect) {
             showDatePickerDialog();
 
             return true;
         }
 
-        if (id == R.id.myweekschedule_home)
-        {
+        if (id == R.id.myweekschedule_home) {
             SharedPreferences sharedPref = getSharedPreferences("global", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
 
-            if (!item.isChecked())
-            {
+            if (!item.isChecked()) {
                 editor.putInt("myschedule", attendee.getId());
 
                 item.setChecked(true);
                 item.setIcon(R.drawable.ic_home_white_24dp);
-            }
-            else
-            {
+            } else {
                 editor.remove("myschedule");
 
                 item.setChecked(false);
@@ -397,33 +359,28 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         return super.onOptionsItemSelected(item);
     }
 
-    public void openSettings(View v)
-    {
+    public void openSettings(View v) {
         Intent settingsIntent = new Intent(this, SettingsActivity.class);
         startActivity(settingsIntent);
     }
 
-    public void showDatePickerDialog()
-    {
+    public void showDatePickerDialog() {
         DialogFragment dialog = new DatePickerFragment();
         dialog.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
-    {
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         private ScheduleActivity activity;
 
         @Override
-        public void onAttach(Context context)
-        {
+        public void onAttach(Context context) {
             super.onAttach(context);
 
             this.activity = (ScheduleActivity) context;
         }
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState)
-        {
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Calculate default selected date
             Calendar c = activity.getDate();
 
@@ -463,8 +420,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
             return dialog;
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day)
-        {
+        public void onDateSet(DatePicker view, int year, int month, int day) {
             Calendar c = Calendar.getInstance(new Locale("nl", "NL"));
             c.set(Calendar.YEAR, year);
             c.set(Calendar.MONTH, month);
@@ -475,26 +431,22 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
         }
     }
 
-    public static class DrawerAdapter extends BaseAdapter
-    {
+    public static class DrawerAdapter extends BaseAdapter {
+        public final static int TYPE_HEADER_ITEM = 0;
+        public final static int TYPE_LIST_ITEM = 1;
+        public final static int TYPE_COUNT = 2;
         private Activity activity;
         private ArrayList<Item> items;
         private LayoutInflater inflater;
 
-        public final static int TYPE_HEADER_ITEM = 0;
-        public final static int TYPE_LIST_ITEM = 1;
-        public final static int TYPE_COUNT = 2;
-
-        public DrawerAdapter(Activity activity)
-        {
+        public DrawerAdapter(Activity activity) {
             this.activity = activity;
             refresh();
 
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public void refresh()
-        {
+        public void refresh() {
             items = new ArrayList<Item>();
 
 
@@ -503,8 +455,7 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
 
             // Starred schedule
             SharedPreferences sharedPref = activity.getSharedPreferences("global", Context.MODE_PRIVATE);
-            if (sharedPref.getInt("myschedule", 0) != 0)
-            {
+            if (sharedPref.getInt("myschedule", 0) != 0) {
                 Attendee myAttendee = new Attendee(sharedPref.getInt("myschedule", 0));
 
                 items.add(new HeaderItem(activity.getString(R.string.myschedule_label)));
@@ -514,50 +465,41 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
             // Recent schedules
             List<String> recents = Arrays.asList(sharedPref.getString("recents", "").split(","));
             items.add(new HeaderItem(activity.getString(R.string.recent_schedules)));
-            for (String recent : recents) try
-            {
-                items.add(new AttendeeItem(new Attendee(Integer.parseInt(recent))));
-            }
-            catch (NumberFormatException e) 
-            {
-                // TODO: Remove item from array
-            }
+            for (String recent : recents)
+                try {
+                    items.add(new AttendeeItem(new Attendee(Integer.parseInt(recent))));
+                } catch (NumberFormatException e) {
+                    // TODO: Remove item from array
+                }
 
             notifyDataSetChanged();
         }
 
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return (long) position;
         }
 
-        public Item getItem(int position)
-        {
+        public Item getItem(int position) {
             return items.get(position);
         }
 
-        public boolean isEnabled(int position)
-        {
+        public boolean isEnabled(int position) {
             return !(getItem(position) instanceof HeaderItem);
         }
 
-        public int getCount()
-        {
+        public int getCount() {
             return items.size();
         }
 
-        public int getViewTypeCount()
-        {
+        public int getViewTypeCount() {
             return TYPE_COUNT;
         }
 
-        public int getItemViewType(int position)
-        {
+        public int getItemViewType(int position) {
             return getItem(position).getViewType();
         }
 
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
+        public View getView(int position, View convertView, ViewGroup parent) {
             Item item = getItem(position);
             convertView = item.getView(inflater, convertView);
             convertView.setTag(item);
@@ -565,34 +507,30 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
             return convertView;
         }
 
-        public static abstract class Item
-        {
+        public static abstract class Item {
             public abstract int getViewType();
+
             public abstract void onClick(Context context);
+
             public abstract View getView(LayoutInflater inflater, View convertView);
         }
 
-        public static class HeaderItem extends Item
-        {
+        public static class HeaderItem extends Item {
             private String label;
 
-            public HeaderItem(String label)
-            {
+            public HeaderItem(String label) {
                 this.label = label;
             }
 
-            public int getViewType()
-            {
+            public int getViewType() {
                 return TYPE_HEADER_ITEM;
             }
 
-            public void onClick(Context context)
-            {
+            public void onClick(Context context) {
                 return;
             }
 
-            public View getView(LayoutInflater inflater, View convertView)
-            {
+            public View getView(LayoutInflater inflater, View convertView) {
                 if (convertView == null)
                     convertView = inflater.inflate(R.layout.drawer_header, null);
 
@@ -602,24 +540,20 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
             }
         }
 
-        public static abstract class ListItem extends Item implements ListView.OnItemClickListener
-        {
+        public static abstract class ListItem extends Item implements ListView.OnItemClickListener {
             private String label;
             private int icon;
 
-            public ListItem(int icon, String label)
-            {
+            public ListItem(int icon, String label) {
                 this.icon = icon;
                 this.label = label;
             }
 
-            public int getViewType()
-            {
+            public int getViewType() {
                 return TYPE_LIST_ITEM;
             }
 
-            public View getView(LayoutInflater inflater, View convertView)
-            {
+            public View getView(LayoutInflater inflater, View convertView) {
                 if (convertView == null)
                     convertView = inflater.inflate(R.layout.drawer_item, null);
 
@@ -629,55 +563,50 @@ public class ScheduleActivity extends AppCompatActivity implements WeekScheduleF
                 return convertView;
             }
 
-            public void onItemClick(AdapterView parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
                 onClick(parent.getContext());
             }
         }
 
-        public static class AttendeeItem extends ListItem
-        {
+        public static class AttendeeItem extends ListItem {
             private Attendee attendee;
 
-            public AttendeeItem(Attendee attendee)
-            {
+            public AttendeeItem(Attendee attendee) {
                 super(getIconResource(attendee), attendee.getName());
 
                 this.attendee = attendee;
             }
 
-            public void onClick(Context context)
-            {
+            private static int getIconResource(Attendee attendee) {
+                switch (attendee.getType()) {
+                    case CLASS:
+                        return R.drawable.ic_school_black_24dp;
+                    case STAFF:
+                        return R.drawable.ic_person_black_24dp;
+                    case FACILITY:
+                        return R.drawable.ic_home_black_24dp;
+                    default:
+                        return R.drawable.ic_help_black_24dp;
+                }
+            }
+
+            public void onClick(Context context) {
                 Intent intent = new Intent(context, ScheduleActivity.class);
                 intent.putExtra("attendeeId", attendee.getId());
                 context.startActivity(intent);
             }
-
-            private static int getIconResource(Attendee attendee)
-            {
-                switch (attendee.getType())
-                {
-                    case CLASS:    return R.drawable.ic_school_black_24dp;
-                    case STAFF:    return R.drawable.ic_person_black_24dp;
-                    case FACILITY: return R.drawable.ic_home_black_24dp;
-                    default:       return R.drawable.ic_help_black_24dp;
-                }
-            }
         }
 
-        public static class IntentItem<T> extends ListItem
-        {
+        public static class IntentItem<T> extends ListItem {
             private Class<?> klass;
 
-            public IntentItem(int icon, String label, Class<?> klass)
-            {
+            public IntentItem(int icon, String label, Class<?> klass) {
                 super(icon, label);
 
                 this.klass = klass;
             }
 
-            public void onClick(Context context)
-            {
+            public void onClick(Context context) {
                 Intent intent = new Intent(context, klass);
                 context.startActivity(intent);
             }

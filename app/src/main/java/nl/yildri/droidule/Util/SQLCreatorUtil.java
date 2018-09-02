@@ -15,7 +15,7 @@ public class SQLCreatorUtil {
 
     /* Tables */
 
-    public static void createOrganisationsTable(SQLiteDatabase db){
+    public static void createOrganisationsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS organisations (\n" +
                 "id INT,\n" +
                 "name TEXT,\n" +
@@ -23,7 +23,7 @@ public class SQLCreatorUtil {
                 ");");
     }
 
-    public static void createLocationsTable(SQLiteDatabase db){
+    public static void createLocationsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS locations (\n" +
                 "id INT,\n" +
                 "name TEXT,\n" +
@@ -33,7 +33,7 @@ public class SQLCreatorUtil {
                 ");");
     }
 
-    public static void createAttendeesTable(SQLiteDatabase db){
+    public static void createAttendeesTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS attendees (\n" +
                 "id INT,\n" +
                 "name TEXT,\n" +
@@ -44,7 +44,7 @@ public class SQLCreatorUtil {
                 ");");
     }
 
-    public static void createEventsTable(SQLiteDatabase db){
+    public static void createEventsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS events (\n" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "year INT,\n" +
@@ -56,7 +56,7 @@ public class SQLCreatorUtil {
                 ");");
     }
 
-    public static void createAttendeeEventsTable(SQLiteDatabase db){
+    public static void createAttendeeEventsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS attendee_events (\n" +
                 "attendee INT,\n" +
                 "event INT,\n" +
@@ -66,7 +66,7 @@ public class SQLCreatorUtil {
         createEventsTable(db);
     }
 
-    public static void createWeekscheduleAgeTable(SQLiteDatabase db){
+    public static void createWeekscheduleAgeTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS weekschedule_age (\n" +
                 "attendee INT,\n" +
                 "year INT,\n" +
@@ -78,7 +78,7 @@ public class SQLCreatorUtil {
 
     /* Views */
 
-    public static void createAttendeeEventsView(SQLiteDatabase db){
+    public static void createAttendeeEventsView(SQLiteDatabase db) {
         db.execSQL("CREATE VIEW IF NOT EXISTS attendee_events_view AS\n" +
                 "    SELECT attendee, event, year, week, day, description, start, end, name, location, type\n" +
                 "    FROM attendee_events\n" +
@@ -90,7 +90,7 @@ public class SQLCreatorUtil {
 
     /* Triggers */
 
-    public static void createAttendeeEventsRemoveTrigger(SQLiteDatabase db){
+    public static void createAttendeeEventsRemoveTrigger(SQLiteDatabase db) {
         db.execSQL("CREATE TRIGGER IF NOT EXISTS attendee_events_remove\n" +
                 "INSTEAD OF DELETE ON attendee_events_view\n" +
                 "BEGIN\n" +
