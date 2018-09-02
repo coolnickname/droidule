@@ -66,8 +66,6 @@ public class Xedule {
         }
 
         if (output == null) try {
-            //output = Fetcher.downloadUrl(getApiLocation() + location);
-
             FileWriter cacheWriter = new FileWriter(cacheFile);
             cacheWriter.write(output);
             cacheWriter.close();
