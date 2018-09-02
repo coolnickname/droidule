@@ -1,7 +1,7 @@
 Droidule
 =======
 
-Unofficial Android app for Xedule using the unofficial [Xedule API](https://git.yildri.nl/Baconator/xedule-api), based on [Xedroid](https://github.com/Darkwater/xedroid) by Sam Lakerveld.
+Unofficial Android app for Xedule using the internal undocumented Xedule API, based on [Xedroid](https://github.com/Darkwater/xedroid) by Sam Lakerveld.
 
 
 The Difference™
