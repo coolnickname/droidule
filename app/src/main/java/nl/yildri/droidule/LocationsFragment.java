@@ -99,12 +99,20 @@ public class LocationsFragment extends ListFragment implements SwipeRefreshLayou
     {
         new AsyncTask<Void, Void, ArrayList<Location>>()
         {
+            @Override
+            protected void onPreExecute()
+            {
+                swipeLayout.setRefreshing(true);
+            }
+
+            @Override
             protected ArrayList<Location> doInBackground(Void... _)
             {
                 Xedule.updateLocations(organisation);
                 return organisation.getLocations();
             }
 
+            @Override
             protected void onPostExecute(ArrayList<Location> locations)
             {
                 populateList(locations);

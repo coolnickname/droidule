@@ -4,19 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import nl.yildri.droidule.Theming.ThemeManager;
+import nl.yildri.droidule.Util.MessageUtil;
 import nl.yildri.droidule.Xedule.Attendee;
 import nl.yildri.droidule.Xedule.Location;
 import nl.yildri.droidule.Xedule.Organisation;
 
-public class ClassSelectionActivity extends ActionBarActivity implements OrganisationsFragment.OnOrganisationSelectedListener,
+public class ClassSelectionActivity extends AppCompatActivity implements OrganisationsFragment.OnOrganisationSelectedListener,
                                                                          LocationsFragment.OnLocationSelectedListener,
                                                                          AttendeesFragment.OnAttendeeSelectedListener
 {
@@ -25,6 +27,10 @@ public class ClassSelectionActivity extends ActionBarActivity implements Organis
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        //TODO: Don't do networking on the main thread. Currently only updating the orginisations is done this way.
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         //Update theme
         setTheme(ThemeManager.getTheme());
 
@@ -61,6 +67,15 @@ public class ClassSelectionActivity extends ActionBarActivity implements Organis
 
     public void onOrganisationSelected(Organisation organisation)
     {
+
+        if(organisation.getCompatible() == 2){ //Organisation only compatible with xedroid
+            MessageUtil.showToast(getString(R.string.organisation_incompatible_xedroid), this);
+            return;
+        }else if(organisation.getCompatible() == 0){ //Organisation incompatible
+            MessageUtil.showToast(getString(R.string.organisation_incompatible), this);
+            return;
+        }
+
         ActionBar bar = getSupportActionBar();
         bar.setTitle(organisation.getName());
         bar.setDisplayHomeAsUpEnabled(true);

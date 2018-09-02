@@ -24,6 +24,9 @@
     <string name="drawer_open">Open navigatie</string>
     <string name="drawer_close">Sluit navigatie</string>
 
+    <string name="organisation_incompatible">De app werkt niet voor deze school!</string>
+    <string name="organisation_incompatible_xedroid">De app werkt niet voor deze school, probeer Xedroid uit de Play Store!</string>
+
     <!-- Preferences -->
 
     <string name="pref_schedule_color_key_title">Rooster kleuren</string>
@@ -42,10 +45,6 @@
         <item>Locatie</item>
     </string-array>
 
-    <string name="pref_api_endpoint_title">API eindpunt</string>
-    <string name="pref_api_endpoint_summary">Adres van de API om te gebruiken</string>
-    <string name="pref_api_endpoint_default">http://xedule.novaember.com/</string>
-
     <string name="pref_version_title">Versie</string>
     <string name="pref_version_summary">@string/version</string>
 
@@ -53,18 +52,24 @@
 
     <string name="pref_applied_theme_title">Thema</string>
     <string name="pref_applied_theme_summary">Kies het kleuren thema van de app (herstart nodig)</string>
-    <string name="pref_applied_theme_default">XEDROID</string>
+    <string name="pref_applied_theme_default">BLUE</string>
 
     <string-array name="pref_applied_theme_values">
-        <item>XEDROID</item>
+        <item>RED</item>
+        <item>GREEN</item>
         <item>BLUE</item>
-        <item>PASTEL</item>
+        <item>PASTELBLUE</item>
+        <item>PURPLE</item>
+        <item>PASTELPURPLE</item>
     </string-array>
 
     <string-array name="pref_applied_theme_entries">
-        <item>Xedroid Klassiek</item>
+        <item>Rood</item>
+        <item>Groen</item>
         <item>Blauw</item>
-        <item>Pastel</item>
+        <item>Pastel blauw</item>
+        <item>Paars</item>
+        <item>Pastel paars</item>
     </string-array>
 
 </resources>

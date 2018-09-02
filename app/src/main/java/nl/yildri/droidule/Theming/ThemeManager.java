@@ -17,20 +17,27 @@ public class ThemeManager {
 
     public static int getTheme(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Droidule.getContext());
-        int theme = -1;
 
-        switch (sharedPref.getString("pref_applied_theme", "XEDROID")) {
-            case "XEDROID":
-                theme = R.style.XedroidTheme;
-                break;
+        switch (sharedPref.getString("pref_applied_theme", "BLUE")) {
+            case "RED":
+                return R.style.RedTheme;
+
             case "BLUE":
-                theme = R.style.BlueTheme;
-                break;
-            case "PASTEL":
-                theme = R.style.PastelTheme;
-                break;
+                return R.style.BlueTheme;
+
+            case "PASTELBLUE":
+                return R.style.PastelBlueTheme;
+
+            case "PURPLE":
+                return R.style.PurpleTheme;
+
+            case "PASTELPURPLE":
+                return R.style.PastelPurpleTheme;
+
+            case "GREEN":
+                return R.style.GreenTheme;
         }
 
-        return theme;
+        return -1;
     }
 }
